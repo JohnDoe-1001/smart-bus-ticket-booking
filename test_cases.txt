@@ -1,0 +1,114 @@
+================================================================================
+SMART BUS TICKET BOOKING SYSTEM - TEST EXECUTION SUITE (TC-01 TO TC-12)
+Target Executable: main-v2.py
+================================================================================
+
+Test ID    : TC-01
+Scenario   : View all available routes
+Input/Action: Main Menu -> Option 1
+Expected   : All 5 starter routes (R101-R105) display with departure times, fares, and seat capacity (e.g. 40/40).
+Actual     : R101 (40/40), R102 (36/36), R103 (32/32), R104 (45/45), R105 (30/30) displayed cleanly.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-02
+Scenario   : Search routes by city (Hyderabad)
+Input/Action: Main Menu -> Option 2 -> Query: "hyderabad"
+Expected   : Displays all routes departing from or arriving at Hyderabad (R101, R103, R105).
+Actual     : Matched R101 (Karachi->Hyderabad), R103 (Hyderabad->Mirpur Khas), R105 (Sukkur->Hyderabad).
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-03
+Scenario   : Search non-existent city
+Input/Action: Main Menu -> Option 2 -> Query: "Atlantis"
+Expected   : Displays "No matching routes found for 'Atlantis'" without crashing.
+Actual     : Printed no-match message cleanly via for-else loop and returned to main menu.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-04
+Scenario   : Book valid ticket (2 seats on R101)
+Input/Action: Name: "Ahmed", Age: 24, Route: "R101", Seats: 2
+Expected   : Booking B1001 confirmed for Rs. 2,400; R101 available seats drop from 40 to 38.
+Actual     : Booking B1001 created; total fare Rs. 2400; R101 seats updated to 38.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-05
+Scenario   : Book with zero seats (Single-Pass Rejection)
+Input/Action: Name: "Sara", Age: 20, Route: "R101", Seats: 0
+Expected   : Validation error ("Seat quantity must be a positive integer"); booking rejected; control returned to main menu; seats unchanged.
+Actual     : Printed validation error; no booking created; R101 seats remained 38; safely returned to main menu loop.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-06
+Scenario   : Request more seats than available capacity
+Input/Action: Name: "Bilal", Age: 30, Route: "R101", Seats: 50
+Expected   : Validation error (exceeds available 38 seats); booking rejected; state unchanged; returns to main menu.
+Actual     : Printed "Requested seats (50) exceed available seats (38)"; booking cancelled cleanly.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-07
+Scenario   : Cancel confirmed booking
+Input/Action: Main Menu -> Option 5 -> Booking ID: "B1001"
+Expected   : Status changes to Cancelled; 2 seats restored to R101 (availability increases from 38 to 40).
+Actual     : B1001 marked Cancelled; 2 seats restored; R101 availability back to 40.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-08
+Scenario   : Attempt duplicate cancellation on already cancelled booking
+Input/Action: Main Menu -> Option 5 -> Booking ID: "B1001"
+Expected   : Error message ("Booking 'B1001' is already Cancelled"); no duplicate seat restoration.
+Actual     : Error printed; R101 availability remained 40.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-09
+Scenario   : Generate booking report on empty state
+Input/Action: Fresh Session -> Option 8
+Expected   : Total created: 0, Confirmed: 0, Cancelled: 0, Revenue: Rs. 0, Fully booked routes: 0.
+Actual     : All booking metrics displayed as zero while correctly scanning routes.
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-10
+Scenario   : Book all remaining seats on a route
+Input/Action: Name: "Zain", Age: 28, Route: "R105", Seats: 30
+Expected   : Booking confirmed; R105 availability becomes 0; status flagged as "Fully Booked".
+Actual     : Booking B1002 confirmed; R105 availability updated to 0/30 (Fully Booked).
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-11
+Scenario   : Generate report after active booking & cancellation
+Input/Action: Main Menu -> Option 8 (after 1 confirmed booking of 30 seats and 1 cancelled booking)
+Expected   : Total created: 2, Confirmed: 1, Cancelled: 1, Revenue excludes cancelled fare.
+Actual     : Confirmed revenue accurately calculated from active booking only (excluding cancelled B1001).
+Status     : PASSED
+
+--------------------------------------------------------------------------------
+
+Test ID    : TC-12
+Scenario   : Invalid menu choice
+Input/Action: Enter choice: "99" or "abc"
+Expected   : Error message ("Invalid choice!"); application loops safely back to main menu.
+Actual     : Printed error message without breaking or exiting menu loop.
+Status     : PASSED
+
+================================================================================
+ALL 12 TEST SCENARIOS PASSED SUCCESSFULLY ON main-v2.py
+================================================================================
